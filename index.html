@@ -29,15 +29,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr v-for="item in products" :key="item.id">
                             <td style="width: 200px">
-                                <div style="height: 100px; background-size: cover; background-position: center"></div>
+                                <div style="height: 100px; background-size: cover; background-position: center"
+                                :style="{ backgroundImage: `url(${item.imageUrl})`}"></div>
                             </td>
                             <td>
-                                title
+                                {{item.title}}
                             </td>
                             <td>
-                                price
+                                <del class="h6" v-if="item.price">原價 {{ toThousand(item.origin_price) }} 元</del>
+                                <div class="h5" v-if="item.price">現在只要 {{ toThousand(item.price) }} 元</div>
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
