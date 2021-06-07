@@ -20,6 +20,9 @@ const app = createApp({
                 message: '',
             },
             cart: {},
+            loadingStatus: {
+                loadingItem: '',
+            },
         }
     },
     components: {
@@ -59,10 +62,21 @@ const app = createApp({
                 })
         },
         getCart() {
-
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/cart`;
+            axios.get(url)
+                .then(res => {
+                    if (res.data.success) {
+                        console.log(res.data.data);
+                        this.cart = res.data.data;
+                    } else {
+                        alert(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
         },
-        addToCart(id, qty = 1) {
-            console.log('addToCart');
+        addCart(id, qty = 1) {
             const data = {
                 "product_id": id,
                 qty
@@ -70,8 +84,8 @@ const app = createApp({
             const url = `${this.apiBaseUrl}/api/${this.apiPath}/cart`
             axios.post(url, { data })
                 .then(res => {
-                    console.log(res.data);
                     if (res.data.success) {
+                        this.getCart();
                         this.$refs.productModalA.hideModal();
                     } else {
                         alert(res.data.message);
@@ -102,6 +116,7 @@ const app = createApp({
     },
     created() {
         this.getProducts();
+        this.getCart();
     },
 })
 
