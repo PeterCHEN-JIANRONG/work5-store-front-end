@@ -10,6 +10,14 @@ const app = createApp({
             apiPath: api_path,
             products: [],
             product: {},
+            cart: {
+                total: 0,
+                final_total: 0,
+            },
+            loadingStatus: {
+                loadingItem: '',
+            },
+            deleteAllDisabled: false,
             form: {
                 user: {
                     name: '',
@@ -19,14 +27,6 @@ const app = createApp({
                 },
                 message: '',
             },
-            cart: {
-                total: 0,
-                final_total: 0,
-            },
-            loadingStatus: {
-                loadingItem: '',
-            },
-            deleteAllDisabled: false,
         }
     },
     components: {
