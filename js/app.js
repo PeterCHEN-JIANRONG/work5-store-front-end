@@ -107,11 +107,31 @@ const app = createApp({
                     console.dir(error);
                 })
         },
-        removeCartItem() {
-
+        removeCartItem(id) {
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/cart/${id}`
+            axios.delete(url)
+                .then(res => {
+                    if (res.data.success) {
+                        this.getCart();
+                    }
+                    alert(res.data.message);
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
         },
         deleteAllCarts() {
-
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/carts`
+            axios.delete(url)
+                .then(res => {
+                    if (res.data.success) {
+                        this.getCart();
+                    }
+                    alert(res.data.message);
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
         },
         createOrder() {
 
