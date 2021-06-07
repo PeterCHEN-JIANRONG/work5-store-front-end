@@ -45,14 +45,19 @@
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <button type="button" class="btn btn-outline-secondary"
-                                        @click="openProductModal(item)">
-                                        <div class="spinner-grow spinner-grow-sm" role="status">
+                                        @click="openProductModal(item)"
+                                        :disabled="loadingStatus.loadingItem === item.id || !item.is_enabled">
+                                        <div class="spinner-grow spinner-grow-sm" role="status"
+                                            v-if="loadingStatus.loadingItem === item.id ">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                         查看更多
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger" @click="addCart(item.id)">
-                                        <div class="spinner-grow spinner-grow-sm" role="status">
+                                    <button type="button" class="btn btn-outline-danger" 
+                                        @click="addCart(item.id)"
+                                        :disabled="loadingStatus.loadingItem === item.id || !item.is_enabled">
+                                        <div class="spinner-grow spinner-grow-sm" role="status"
+                                            v-if="loadingStatus.loadingItem === item.id">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                         加到購物車
@@ -64,7 +69,9 @@
                 </table>
                 <!-- 購物車列表 -->
                 <div class="text-end">
-                    <button class="btn btn-outline-danger" type="button" @click="deleteAllCarts">清空購物車</button>
+                    <button class="btn btn-outline-danger" type="button"
+                        :disabled="deleteAllDisabled"
+                        @click="deleteAllCarts">清空購物車</button>
                 </div>
                 <table class="table align-middle">
                     <thead>
@@ -108,7 +115,7 @@
                                 </td>
                                 <td class="text-end">
                                     <small v-if="cart.final_total !== cart.total" class="text-success">折扣價：</small>
-                                    {{ item.final_total }}
+                                    {{ toThousand(item.final_total) }}
                                 </td>
                             </tr>
                         </template>
@@ -116,11 +123,11 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-end">總計</td>
-                            <td class="text-end">{{ cart.total }}</td>
+                            <td class="text-end">{{ toThousand(cart.total) }}</td>
                         </tr>
                         <tr v-if="cart.final_total !== cart.total">
                             <td colspan="3" class="text-end text-success">折扣價</td>
-                            <td class="text-end text-success">{{ cart.final_total }}</td>
+                            <td class="text-end text-success">{{ toThousand(cart.final_total) }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -152,15 +159,15 @@
                                 <span class="badge bg-primary rounded-pill">{{ tempProduct.category }}</span>
                                 <p>商品描述：{{ tempProduct.description }}</p>
                                 <p>商品內容：{{ tempProduct.content }}</p>
-                                <div class="h5" v-if="!tempProduct.price">{{ tempProduct.origin_price }} 元</div>
-                                <del class="h6" v-if="tempProduct.price">原價 {{ tempProduct.origin_price }} 元</del>
-                                <div class="h5" v-if="tempProduct.price">現在只要 {{ tempProduct.price }} 元</div>
+                                <div class="h5" v-if="!tempProduct.price">{{ toThousand(tempProduct.origin_price) }} 元</div>
+                                <del class="h6" v-if="tempProduct.price">原價 {{ toThousand(tempProduct.origin_price) }} 元</del>
+                                <div class="h5" v-if="tempProduct.price">現在只要 {{ toThousand(tempProduct.price) }} 元</div>
                                 <div>
                                     <div class="input-group">
                                         <input type="number" class="form-control"
                                             v-model.number="qty" min="1">
                                         <button type="button" class="btn btn-primary"
-                                                @click="$emit('add-to-cart', tempProduct.id, qty)">加入購物車</button>
+                                            @click="$emit('add-to-cart', tempProduct.id, qty)">加入購物車</button>
                                     </div>
                                 </div>
                             </div>
