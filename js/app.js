@@ -43,9 +43,6 @@ const app = createApp({
                     console.dir(error);
                 })
         },
-        getProduct() {
-
-        },
         openProductModal(item) {
             const url = `${this.apiBaseUrl}/api/${this.apiPath}/product/${item.id}`;
             axios.get(url)
@@ -66,7 +63,6 @@ const app = createApp({
             axios.get(url)
                 .then(res => {
                     if (res.data.success) {
-                        console.log(res.data.data);
                         this.cart = res.data.data;
                     } else {
                         alert(res.data.message);
@@ -78,7 +74,7 @@ const app = createApp({
         },
         addCart(id, qty = 1) {
             const data = {
-                "product_id": id,
+                'product_id': id,
                 qty
             }
             const url = `${this.apiBaseUrl}/api/${this.apiPath}/cart`
@@ -87,16 +83,29 @@ const app = createApp({
                     if (res.data.success) {
                         this.getCart();
                         this.$refs.productModalA.hideModal();
-                    } else {
-                        alert(res.data.message);
                     }
+                    alert(res.data.message);
                 })
                 .catch(error => {
                     console.dir(error);
                 })
         },
-        updateCart() {
-
+        updateCart(item) {
+            const data = {
+                product_id: item.product_id,
+                qty: item.qty,
+            }
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/cart/${item.id}`
+            axios.put(url, { data })
+                .then(res => {
+                    if (res.data.success) {
+                        this.getCart();
+                    }
+                    alert(res.data.message);
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
         },
         removeCartItem() {
 
