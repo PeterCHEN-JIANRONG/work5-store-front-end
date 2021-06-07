@@ -32,24 +32,26 @@
                         <tr v-for="item in products" :key="item.id">
                             <td style="width: 200px">
                                 <div style="height: 100px; background-size: cover; background-position: center"
-                                :style="{ backgroundImage: `url(${item.imageUrl})`}"></div>
+                                    v-if="item.imageUrl" :style="{ backgroundImage: `url(${item.imageUrl})`}"></div>
                             </td>
                             <td>
                                 {{item.title}}
                             </td>
                             <td>
+                                <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
                                 <del class="h6" v-if="item.price">原價 {{ toThousand(item.origin_price) }} 元</del>
                                 <div class="h5" v-if="item.price">現在只要 {{ toThousand(item.price) }} 元</div>
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <button type="button" class="btn btn-outline-secondary">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        @click="openProductModal(item)">
                                         <div class="spinner-grow spinner-grow-sm" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                         查看更多
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger">
+                                    <button type="button" class="btn btn-outline-danger" @click="addToCart(item.id)">
                                         <div class="spinner-grow spinner-grow-sm" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
@@ -62,10 +64,53 @@
                 </table>
                 <!-- 購物車列表 -->
             </div>
-
         </div>
+
+        <!-- modal -->
+        <product-modal ref="productModalA" :product="product" @add-to-cart="addToCart"></product-modal>
     </div>
 
+    <!-- x-template -->
+    <script type="text/x-template" id="productModal-template">
+        <div class="modal fade" ref="modal" id="productModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content border-0">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <span>{{ tempProduct.title }}</span>
+                        </h5>
+                        <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <img class="img-fluid" :src="tempProduct.imagesUrl" alt="">
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="badge bg-primary rounded-pill">{{ tempProduct.category }}</span>
+                                <p>商品描述：{{ tempProduct.description }}</p>
+                                <p>商品內容：{{ tempProduct.content }}</p>
+                                <div class="h5" v-if="!tempProduct.price">{{ tempProduct.origin_price }} 元</div>
+                                <del class="h6" v-if="tempProduct.price">原價 {{ tempProduct.origin_price }} 元</del>
+                                <div class="h5" v-if="tempProduct.price">現在只要 {{ tempProduct.price }} 元</div>
+                                <div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control"
+                                            v-model.number="qty" min="1">
+                                        <button type="button" class="btn btn-primary"
+                                                @click="$emit('add-to-cart', tempProduct.id, qty)">加入購物車</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- col-sm-6 end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 
 
     <!-- axios、BS5+popper、vee-validate -->
@@ -73,11 +118,11 @@
         integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
         crossorigin='anonymous'></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
-        integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
-        crossorigin="anonymous"></script>
+        integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous">
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
-        integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
-        crossorigin="anonymous"></script>
+        integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous">
+        </script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/vee-validate@next"></script>
     <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>

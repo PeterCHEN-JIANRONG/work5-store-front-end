@@ -1,6 +1,6 @@
 // esm module
 import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.esm-browser.js';
-
+import productModal from './productModal.js'
 
 
 const app = createApp({
@@ -22,13 +22,15 @@ const app = createApp({
             cart: {},
         }
     },
+    components: {
+        productModal,
+    },
     methods: {
         getProducts(page = 1) {
             const url = `${this.apiBaseUrl}/api/${this.apiPath}/products?page=${page}`;
             axios.get(url)
                 .then(res => {
                     if (res.data.success) {
-                        console.log(res.data);
                         this.products = res.data.products;
                     } else {
                         alert(res.data.message);
@@ -41,11 +43,43 @@ const app = createApp({
         getProduct() {
 
         },
+        openProductModal(item) {
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/product/${item.id}`;
+            axios.get(url)
+                .then(res => {
+                    if (res.data.success) {
+                        this.product = res.data.product;
+                        this.$refs.productModalA.openModal();
+                    } else {
+                        alert(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
+        },
         getCart() {
 
         },
-        addToCart() {
-
+        addToCart(id, qty = 1) {
+            console.log('addToCart');
+            const data = {
+                "product_id": id,
+                qty
+            }
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/cart`
+            axios.post(url, { data })
+                .then(res => {
+                    console.log(res.data);
+                    if (res.data.success) {
+                        this.$refs.productModalA.hideModal();
+                    } else {
+                        alert(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
         },
         updateCart() {
 
