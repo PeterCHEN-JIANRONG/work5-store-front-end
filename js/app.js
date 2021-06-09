@@ -164,7 +164,20 @@ const app = Vue.createApp({
                 })
         },
         createOrder() {
-            console.log('createOrder');
+            const order = this.form;
+            const url = `${this.apiBaseUrl}/api/${this.apiPath}/order`
+            axios.post(url, { data: order })
+                .then(res => {
+                    if (res.data.success) {
+                        this.getCart();
+                        // 清空表單資料
+                        this.$refs.form.resetForm();
+                    }
+                    alert(res.data.message);
+                })
+                .catch(error => {
+                    console.dir(error);
+                })
         },
         toThousand(num) {
             // 千分位
