@@ -17,6 +17,7 @@ defineRule('max', max);
 loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
 configure({
     generateMessage: localize('zh_TW'),
+    validateOnInput: true, // 調整為輸入字元立即進行驗證
 });
 
 const app = Vue.createApp({
@@ -111,6 +112,7 @@ const app = Vue.createApp({
                     if (res.data.success) {
                         this.getCart();
                         this.loadingStatus.loadingItem = '';
+                        this.$refs.productModalA.qty = 1;  //初始化加入購物車數量:1
                         this.$refs.productModalA.hideModal();
                     }
                     alert(res.data.message);

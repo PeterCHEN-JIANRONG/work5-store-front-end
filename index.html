@@ -70,7 +70,8 @@
                 </table>
                 <!-- 購物車列表 -->
                 <div class="text-end">
-                    <button class="btn btn-outline-danger" type="button" :disabled="!hasCartsItems"
+                    <button class="btn btn-outline-danger" type="button" 
+                        :disabled="!hasCartsItems"
                         @click="deleteAllCarts">清空購物車</button>
                 </div>
                 <table class="table align-middle">
@@ -181,7 +182,8 @@
                             v-model="form.message"></textarea>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-danger">送出訂單</button>
+                        <button type="submit" class="btn btn-danger"
+                            :disabled="!hasCartsItems">送出訂單</button>
                     </div>
                 </v-form>
             </div>
@@ -189,7 +191,7 @@
         
         <!-- vue-loading -->
         <loading v-bind:active="isLoading"></loading>
-        
+
         <!-- modal -->
         <product-modal ref="productModalA" :product="product" @add-to-cart="addCart"></product-modal>
     </div>
@@ -205,7 +207,8 @@
                             <span>{{ tempProduct.title }}</span>
                         </h5>
                         <button type="button" class="btn-close"
-                            data-bs-dismiss="modal" aria-label="Close"></button>
+                            data-bs-dismiss="modal" aria-label="Close"
+                            @click="qty = 1"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
