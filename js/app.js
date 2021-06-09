@@ -1,9 +1,25 @@
 // esm module
-import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.esm-browser.js';
+// import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.11/vue.esm-browser.js';
 import productModal from './productModal.js'
 
+// VeeValidate
+const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+const { required, email, min, max } = VeeValidateRules;
+const { localize, loadLocaleFromURL } = VeeValidateI18n;
 
-const app = createApp({
+// rules
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('max', max);
+
+// languages
+loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
+configure({
+    generateMessage: localize('zh_TW'),
+});
+
+const app = Vue.createApp({
     data() {
         return {
             apiBaseUrl: api_base_url,
@@ -13,11 +29,12 @@ const app = createApp({
             cart: {
                 total: 0,
                 final_total: 0,
+                carts: [],
             },
             loadingStatus: {
                 loadingItem: '',
             },
-            deleteAllDisabled: false,
+            hasCartsItems: false,
             form: {
                 user: {
                     name: '',
@@ -31,6 +48,9 @@ const app = createApp({
     },
     components: {
         productModal,
+        VForm: Form,
+        VField: Field,
+        ErrorMessage: ErrorMessage,
     },
     methods: {
         getProducts(page = 1) {
@@ -144,7 +164,7 @@ const app = createApp({
                 })
         },
         createOrder() {
-
+            console.log('createOrder');
         },
         toThousand(num) {
             // 千分位
@@ -155,8 +175,8 @@ const app = createApp({
     },
     watch: {
         cart() {
-            // 若無購物車項目, 關閉清空購物車按鈕
-            this.deleteAllDisabled = (this.cart.carts.length) ? false : true;
+            // 購物車是否有資料， 是:true 否:false
+            this.hasCartsItems = (this.cart.carts.length) ? true : false;
         }
     },
     created() {
