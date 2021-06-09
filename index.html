@@ -12,6 +12,8 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'
         integrity='sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=='
         crossorigin='anonymous' />
+    <!-- vue-loading-overlay -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@4.0.2/dist/vue-loading.css">
 </head>
 
 <body>
@@ -184,6 +186,10 @@
                 </v-form>
             </div>
         </div>
+        
+        <!-- vue-loading -->
+        <loading v-bind:active="isLoading"></loading>
+        
         <!-- modal -->
         <product-modal ref="productModalA" :product="product" @add-to-cart="addCart"></product-modal>
     </div>
@@ -231,6 +237,7 @@
     </script>
 
 
+
     <!-- axios、BS5+popper、vee-validate -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
         integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
@@ -248,6 +255,9 @@
     <script src="https://unpkg.com/vee-validate@next"></script>
     <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>
     <script src="https://unpkg.com/@vee-validate/rules"></script>
+
+    <!-- vue-loading-overlay -->
+    <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@4.0.2/dist/vue-loading.min.js"></script>
 
     <!-- my js -->
     <script src="js/config.js"></script>

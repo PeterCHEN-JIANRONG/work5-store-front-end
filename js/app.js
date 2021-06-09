@@ -44,6 +44,7 @@ const app = Vue.createApp({
                 },
                 message: '',
             },
+            isLoading: false,
         }
     },
     components: {
@@ -164,6 +165,7 @@ const app = Vue.createApp({
                 })
         },
         createOrder() {
+            this.isLoading = true;
             const order = this.form;
             const url = `${this.apiBaseUrl}/api/${this.apiPath}/order`
             axios.post(url, { data: order })
@@ -173,6 +175,7 @@ const app = Vue.createApp({
                         // 清空表單資料
                         this.$refs.form.resetForm();
                     }
+                    this.isLoading = false;
                     alert(res.data.message);
                 })
                 .catch(error => {
@@ -197,5 +200,7 @@ const app = Vue.createApp({
         this.getCart();
     },
 })
+
+app.component('loading', VueLoading);
 
 app.mount('#app');
